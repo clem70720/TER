@@ -30,7 +30,7 @@ y_test=df_test.label
 # get the start time
 st = time.process_time()
 # Making a pipeline to get faster CPU exec time 
-pipe = Pipeline([('pca', PCA(n_components=0.92)),('scaler', StandardScaler()), ('SVC_Classifier',SVC(C=12,kernel='rbf'))])
+pipe = Pipeline([('pca', PCA(n_components=0.92)),('scaler', StandardScaler()), ('SVC_Classifier',SVC(C=4,kernel='rbf',probability=True))])
 
 pipe.fit(X_train,y_train)
 score_accuracy = pipe.score(X_test,y_test)

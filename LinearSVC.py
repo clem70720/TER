@@ -6,6 +6,7 @@ from sklearn.svm import LinearSVC
 from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 from joblib import dump
+from sklearn.calibration import CalibratedClassifierCV
 
 #Target for this classification task set at 85% accuracy score
 
@@ -29,8 +30,13 @@ X_test=df_test.drop('label',axis=1).astype("float32")
 X_test = X_test / np.max (X_test)
 y_test=df_test.label
 
+linear_svc = LinearSVC(loss='hinge',multi_class='ovr',dual='auto') 
+
+calibrated_svc = CalibratedClassifierCV(linear_svc,
+                                        cv=2) 
+
 # Making a pipeline to get faster CPU exec time 
-pipe = Pipeline([('pca', PCA(n_components=0.9)), ('LinearSVC_Classifier',LinearSVC(loss='hinge',multi_class='ovr',dual='auto'))])
+pipe = Pipeline([('pca', PCA(n_components=0.9)), ('LinearSVC_Classifier',calibrated_svc)])
 
 pipe.fit(X_train,y_train)
 score_accuracy = pipe.score(X_test,y_test)
