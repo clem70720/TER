@@ -21,18 +21,19 @@ def prediction(model_path,image_to_predict):
         image_to_predict = transform_image(image_to_predict)
         image_to_predict = image_to_predict.reshape(1,784)
         model_prediction = load_model_var.predict(image_to_predict)
-        print(model_prediction[0])
-        #model_prediction_proba = load_model_var.predict_log_proba(image_to_predict)
+        #print(model_prediction[0])
+        model_prediction_proba = load_model_var.predict_proba(image_to_predict)
         #print(model_prediction_proba[0])
-        return model_prediction[0]
+        return (model_prediction[0],model_prediction_proba[0])
     elif splitext(model_path)[1] == ".keras":
         load_model_var = load_model(model_path)
         image_to_predict = transform_image(image_to_predict)
         image_to_predict = image_to_predict.reshape(1,28,28,1)
         model_prediction_proba = load_model_var.predict(image_to_predict)
-        category_predicted = np.where(model_prediction[0] == max(model_prediction[0]))[0][0]
+        category_predicted = np.where(model_prediction_proba[0] == max(model_prediction_proba[0]))[0][0]
         #print(max(model_prediction[0]))
         #print(np.where(model_prediction[0] == max(model_prediction[0]))[0][0])
+        #print(model_prediction_proba[0])
         return (category_predicted,model_prediction_proba[0])
     else:
         print(splitext(model_path)[1])
@@ -45,7 +46,7 @@ print(image_to_show.shape)
 plt.imshow(image_to_show,cmap='gray')
 plt.show()"""
 
-prediction("SVC.sav","T-shirt_grey.jpeg")
+#prediction("SVC.sav","T-shirt_grey.jpeg")
 
 
 
