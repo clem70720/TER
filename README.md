@@ -5,7 +5,7 @@ numpy,
 scipy,
 scikit-learn,
 keras,
-tensorflow
+tensorflow,
 skimage,
 tkinter,
 customtkinter,
