@@ -12,6 +12,7 @@ df=pad.read_csv('./fashion-mnist_train.csv')
 
 # quick peek into the dataframe
 print(df.head())
+print(df.info())
 
 # checking for null-values
 print(f"Il y a {df.isnull().sum().sum()} valeurs nulles")
@@ -21,7 +22,6 @@ print(f"Il y a {df.duplicated().sum()} données dupliquées")
 
 # dropping the above 43 duplicated images
 df.drop_duplicates(inplace=True)
-print(df.shape)
 
 print(df.label.unique())
 
@@ -30,9 +30,6 @@ df.drop_duplicates(inplace=True)
 # Creating X and y variables
 X_train=df.drop('label',axis=1)
 y_train=df.label
-
-#testing linearity by evaluating R-square
-print(LinearRegression().fit(X_train,y_train).score(X_train,y_train))
 
 # lets now analyze the labels and their corresponding numbers
 colors = sns.color_palette('mako_r')[1:3]
