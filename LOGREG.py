@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pad
 import time
 
-from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import TruncatedSVD
 from sklearn.linear_model import LogisticRegression
 from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
@@ -32,10 +32,10 @@ X_test = X_test / np.max (X_test)
 y_test=df_test.label
 
 # Making a pipeline to get faster CPU exec time 
-pipe = Pipeline([('pca', PCA(n_components=0.9)),('scaler', StandardScaler()), ('logreg', LogisticRegression(solver="sag"))])
+pipe = Pipeline([('TSVD', TruncatedSVD(n_components=185)), ('logreg', LogisticRegression(solver="sag", random_state = 42))])
 
-pipe.fit(X_train,y_train)
-score_accuracy = pipe.score(X_test,y_test)
+pipe.fit(X_train,y_train) # fit on train data 
+score_accuracy = pipe.score(X_test,y_test) # Score accuracy on test data
 test_accuracy=round(100*score_accuracy,2)
 print(f'The test accuracy score is {test_accuracy}%')
 
@@ -70,4 +70,14 @@ J'ai ensuite utilisé la PCA qui permet de réduire le nombre de variable (au pr
 expliquant la variance, j'ai testé pour 80% de variance expliqué mais cela était en dessous de la cible donc je ne l'ai pas retenu, 90% permettait d'atteindre la cible avec le
 plus faible temps de calcul je l'ai donc retenu enfin j'ai essayé avec 95% de variance expliqué mais cela ne fournit qu'un gain marginal de précision pour un gain de calcul moins
 important que 90%, j'ai ensuite ajouté la PCA pour le modèle KNN ce qui a nettement augmenté ses performances en temps de calcul 
+
+Tests 14/03/2024:
+
+PCA 0.95 + LogReg sag, random_state=42 = 85.64% en 35.67 secondes
+TSVD 150 + LogReg sag, random_state=42 = 85.72% en 27.95 secondes
+TSVD 200 + LogReg sag, random_state=42 = 85.79% en 36.81 secondes
+TSVD 175 + LogReg sag, random_state=42 = 85.83% en 31.96 secondes
+TSVD 187 + LogReg sag, random_state=42 = 85.72% en 34.06 secondes
+TSVD 162 + LogReg sag, random_state=42 = 85.8% en 28.95 secondes
+TSVD 185 + LogReg sag, random_state=42 = 85.86% en 33.34 secondes #retenu
 """
