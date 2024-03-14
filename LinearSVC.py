@@ -5,6 +5,7 @@ import time
 from sklearn.svm import LinearSVC
 from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import cross_val_score
 from joblib import dump
 from sklearn.calibration import CalibratedClassifierCV
 
@@ -32,11 +33,19 @@ y_test=df_test.label
 
 linear_svc = LinearSVC(loss='hinge',multi_class='ovr',dual='auto') 
 
-calibrated_svc = CalibratedClassifierCV(linear_svc,
-                                        cv=2) 
+calibrated_svc = CalibratedClassifierCV(linear_svc, cv=1) 
 
 # Making a pipeline to get faster CPU exec time 
 pipe = Pipeline([('pca', PCA(n_components=0.9)), ('LinearSVC_Classifier',calibrated_svc)])
+
+# Cross validate 
+nb_cv=5
+mean_cross_val_score = cross_val_score(pipe,X_train,y_train,cv=nb_cv).mean()
+train_accuracy = round(100*mean_cross_val_score,2)
+print(f'The mean train accuracy score is {train_accuracy}% with {nb_cv} cross-validation')
+
+# get the start time
+st = time.process_time()
 
 pipe.fit(X_train,y_train)
 score_accuracy = pipe.score(X_test,y_test)

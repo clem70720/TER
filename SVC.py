@@ -5,6 +5,7 @@ import time
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.decomposition import PCA
+from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import Pipeline
 from joblib import dump
 
@@ -27,10 +28,17 @@ X_test=df_test.drop('label',axis=1).astype("float32")
 X_test = X_test / np.max (X_test)
 y_test=df_test.label
 
-# get the start time
-st = time.process_time()
 # Making a pipeline to get faster CPU exec time 
 pipe = Pipeline([('pca', PCA(n_components=0.92)),('scaler', StandardScaler()), ('SVC_Classifier',SVC(C=4,kernel='rbf',probability=True))])
+
+# Cross validate 
+nb_cv=5
+mean_cross_val_score = cross_val_score(pipe,X_train,y_train,cv=nb_cv).mean()
+train_accuracy = round(100*mean_cross_val_score,2)
+print(f'The mean train accuracy score is {train_accuracy}% with {nb_cv} cross-validation')
+
+# get the start time
+st = time.process_time()
 
 pipe.fit(X_train,y_train)
 score_accuracy = pipe.score(X_test,y_test)

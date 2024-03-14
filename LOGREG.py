@@ -5,14 +5,11 @@ import time
 
 from sklearn.decomposition import TruncatedSVD
 from sklearn.linear_model import LogisticRegression
-from sklearn.decomposition import PCA
+from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import Pipeline
 from joblib import dump
 
 #Target for this classification task set at 85% accuracy score
-
-# get the start time
-st = time.process_time()
 
 # reading the data csv and converting it into a dataframe
 df=pad.read_csv('./fashion-mnist_train.csv')
@@ -32,7 +29,16 @@ X_test = X_test / np.max (X_test)
 y_test=df_test.label
 
 # Making a pipeline to get faster CPU exec time 
-pipe = Pipeline([('TSVD', TruncatedSVD(n_components=185)), ('logreg', LogisticRegression(solver="sag", random_state = 42))])
+pipe = Pipeline([('TSVD', TruncatedSVD(n_components=185)), ('logreg', LogisticRegression(solver="sag", random_state=42))])
+
+# Cross validate 
+nb_cv=5
+mean_cross_val_score = cross_val_score(pipe,X_train,y_train,cv=nb_cv).mean()
+train_accuracy = round(100*mean_cross_val_score,2)
+print(f'The mean train accuracy score is {train_accuracy}% with {nb_cv} cross-validation')
+
+# get the start time
+st = time.process_time()
 
 pipe.fit(X_train,y_train) # fit on train data 
 score_accuracy = pipe.score(X_test,y_test) # Score accuracy on test data
