@@ -1,61 +1,53 @@
 import tkinter as tk
 import tkinter.messagebox
-import customtkinter as ctk
 import Transform_prediction
+
 from tkinter import ttk
 from tkinter import filedialog as fd
 from tkinter.messagebox import showinfo
 from PIL import ImageTk,Image
+from tkinterdnd2 import DND_FILES
+from tkinterdnd2 import *
 
-ctk.set_appearance_mode("dark")  # Modes: system (default), light, dark
-ctk.set_default_color_theme("dark-blue")  # Themes: blue (default), dark-blue, green
-
-class App(ctk.CTk):
+class App(TkinterDnD.Tk):
   def __init__(self):
     super().__init__()
 
     # configure the root window
     self.title('GUI TER')
-    self.geometry('600x600')
+    self.geometry('600x450')
     self.filepathimage = ""
     self.radio_var = tkinter.IntVar(value=0)
-    # configure grid layout (4x4)
-    self.grid_columnconfigure(1, weight=1)
-    self.grid_columnconfigure((2, 3), weight=0)
-    self.grid_rowconfigure((0, 1, 2), weight=1)
 
-    self.frame = ctk.CTkFrame(self,width=200)
-    self.frame.grid(row=0, column=1, columnspan=2, padx=(0, 0), pady=(0, 0))
-    label1_frame = ctk.CTkLabel(self.frame, text="")
-    label1_frame.grid(column=1,row=1)
-    label2_frame = ctk.CTkLabel(self.frame, text="")
-    label2_frame.grid(column=1,row=2)
-
+    # labels
+    self.label_radio = ttk.Label(self,text="Modèles:").place(x=400,y=10)
+    label1 = tk.Label(self,text="")
+    label1.place(x=225,y=125)
+    label2 = tk.Label(self,text="")
+    label2.place(x=175,y=150)
+    
 # create radiobutton frame
-    self.radiobutton_frame = ctk.CTkFrame(self)
-    self.radiobutton_frame.grid(row=0, column=3, padx=(0, 0), pady=(0, 0), sticky="ne")
-    self.label_radio_group = ctk.CTkLabel(master=self.radiobutton_frame, text="Modèles:")
-    self.label_radio_group.grid(row=0, column=5, columnspan=1, sticky="")
-    self.radio_button_1 = ctk.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=0, text="KNN")
-    self.radio_button_1.grid(row=1, column=5, pady=10, padx=10, sticky="w")
-    self.radio_button_2 = ctk.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=1, text="Support Vector Machine")
-    self.radio_button_2.grid(row=2, column=5, pady=10, padx=10, sticky="w")
-    self.radio_button_3 = ctk.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=2, text="Linear Support Vector Machine")
-    self.radio_button_3.grid(row=3, column=5, pady=10, padx=10, sticky="w")
-    self.radio_button_3 = ctk.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=3, text="Logistic Regression")
-    self.radio_button_3.grid(row=4, column=5, pady=10, padx=10, sticky="w")
-    self.radio_button_4 = ctk.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=4, text="Multi-Layers Perceptron")
-    self.radio_button_4.grid(row=5, column=5, pady=10, padx=10, sticky="w")
-    self.radio_button_4 = ctk.CTkRadioButton(master=self.radiobutton_frame, variable=self.radio_var, value=5, text="Convolution Neural Network")
-    self.radio_button_4.grid(row=6, column=5, pady=10, padx=10, sticky="w")
+    # Dictionary to create multiple buttons
+    values = {"KNN" : "0",
+          "Support Vector Machine" : "1",
+          "Linear Support Vector Machine" : "2",
+          "Logistic Regression" : "3",
+          "Multi-Layers Perceptron": "4",
+          "Convolution Neural Network": "5"}
+
+    for (text, value) in values.items():
+        value_y = 40 + int(value) * 40
+        #print(value_y)
+        tk.Radiobutton(self.label_radio,text=text, variable=self.radio_var,
+                   value=value).place(x=400,y=value_y)
+
+#Presentation text
+    label_text_box = ttk.Label(self,text="Welcome to image\nclassification app\nusing Machine\nLearning and Deep\nLearning model!\n\nSteps:\n1:Select or drop an\nimage\n2:Select a model\n3:Apply model\n4:Get Results!")
+    label_text_box.place(x=5,y=10)
 
 # create sidebar frame with widgets
-    self.sidebar_frame = ctk.CTkFrame(self)
-    self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
     
-    #Exit Button
-    ctk.CTkButton(self.sidebar_frame,text='Exit',command=lambda: self.quit()).grid(row=0,column=0)
-
+    
     #Functions for other button
     @staticmethod
     def adapt_text_model(radio_val):
@@ -68,7 +60,7 @@ class App(ctk.CTk):
       elif radio_val == 3:
           return "LogReg.sav"
       elif radio_val == 4:
-          return "Sequential.keras"
+          return "ML-Perceptron.keras"
       elif radio_val == 5:
           return "CNN.keras"
 
@@ -105,16 +97,6 @@ class App(ctk.CTk):
             prediction_text = "Bottines"
             prediction_proba = f"Probabilité associé: {round(float(prediction[1][9]),2)*100}%"
         return (prediction_text,prediction_proba)
-        
-
-    @staticmethod
-    def call_model():
-        model_text = adapt_text_model(self.radio_var.get())
-        prediction = Transform_prediction.prediction(model_path=model_text, image_to_predict = self.filepathimage)
-        pred_text = create_pred_text(prediction)
-        label1_frame.configure(text=pred_text[0])
-        label2_frame.configure(text=pred_text[1])
-        
 
     @staticmethod
     def select_file():
@@ -122,16 +104,45 @@ class App(ctk.CTk):
             filepath = fd.askopenfilename(title='Open image',initialdir='/',filetypes=filetypes)
             self.filepathimage = f"{filepath}"
             image = Image.open(f"{filepath}")
-            image = image.resize((100,100))
-            image = ImageTk.PhotoImage(image)
-            ctk.CTkLabel(self.frame, image=image,text="").grid(column=1,row=0)
+            reside_image = image.resize((100, 100))
+            image = ImageTk.PhotoImage(reside_image,size=(100,100))
+            tk.Label(self, image=image,text="").place(x=200,y=20)
             self.mainloop()
     
+    @staticmethod
+    def dnd_file(event):
+            testvariable.set(event.data)
+            self.filepathimage = f"{str(event.data)}"
+            image = Image.open(self.filepathimage)
+            # resize image
+            reside_image = image.resize((100, 100))
+            image = ImageTk.PhotoImage(reside_image,size=(100,100))
+            tk.Label(self, image=image,text="").place(x=200,y=20)
+            self.mainloop()
+
+    @staticmethod
+    def call_model():
+        model_text = adapt_text_model(self.radio_var.get())
+        prediction = Transform_prediction.prediction(model_path=model_text, image_to_predict = self.filepathimage)
+        pred_text = create_pred_text(prediction)
+        label1.config(text= pred_text[0])
+        label2.config(text= pred_text[1])
+        
+
+    testvariable = tk.StringVar()
+    label3_frame = tk.Label(self,justify="center",text="Drag'n Drop your image below")
+    label3_frame.place(x=175,y=200)
+    entrybox = ttk.Entry(master=self, textvar=testvariable,width=30)
+    entrybox.place(x=175,y=225)
+    entrybox.drop_target_register(DND_FILES)
+    entrybox.dnd_bind('<<Drop>>',dnd_file)
+
     #Apply model button
-    self.myButton = ctk.CTkButton(self.radiobutton_frame, text="Apply Model",command=call_model).grid(column=5,row=7, pady=10, padx=10)
+    self.myButton = tk.Button(self, text="Apply Model",command=call_model).place(x=400,y=275)
     
     #Open Image Button Code
-    self.open_button = ctk.CTkButton(self,text='Select an Image',command=select_file).grid(column=1,row=0,sticky='n')
+    self.open_button = tk.Button(self,text='Select an Image',command=select_file).place(x=75,y=222)
+
 
 if __name__ == "__main__":
   app = App()
