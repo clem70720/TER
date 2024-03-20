@@ -9,7 +9,7 @@ from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 
 # Data augmentation function
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator
 from random_eraser import get_random_eraser
 
 def random_reverse(x): 
@@ -97,8 +97,7 @@ model.add(Dense(10, activation='softmax'))
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-model.fit_generator(datagen.flow(X_train, y_train, batch_size=32), 
-                                      steps_per_epoch=X_train.shape[0], epochs=20, 
+model.fit_generator(datagen.flow(X_train, y_train, batch_size=32), epochs=20, 
                                       validation_data=(X_val, y_val))
 
 score = model.evaluate(X_test,y_test,verbose=0, steps=math.ceil(10000/32))
