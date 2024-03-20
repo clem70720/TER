@@ -11,3 +11,5 @@ tkinter,
 tkinterdnd2
 
 Back to tkinter update done 
+
+https://github.com/yu4u/cutout-random-erasing
