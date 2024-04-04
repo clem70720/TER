@@ -45,7 +45,7 @@ score_accuracy = pipe.score(X_test,y_test) # Score accuracy on test data
 test_accuracy=round(100*score_accuracy,2)
 print(f'The test accuracy score is {test_accuracy}%')
 
-dump(pipe,"KNN.sav")
+dump(pipe,"RF.sav")
 
 # get the end time
 et = time.process_time()

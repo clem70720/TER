@@ -29,7 +29,7 @@ X_test = X_test / np.max (X_test)
 y_test=df_test.label
 
 # Making a pipeline to get faster CPU exec time 
-pipe = Pipeline([('pca', PCA(n_components=0.92)),('scaler', StandardScaler()), ('GBC', GradientBoostingClassifier(loss='deviance',max_depth=10,n_estimators=100))])
+pipe = Pipeline([('pca', PCA(n_components=0.92)),('scaler', StandardScaler()), ('GBC', GradientBoostingClassifier(loss='log_loss',max_depth=10,n_estimators=100))])
 
 # Cross validate 
 nb_cv=5
@@ -45,7 +45,7 @@ score_accuracy = pipe.score(X_test,y_test) # Score accuracy on test data
 test_accuracy=round(100*score_accuracy,2)
 print(f'The test accuracy score is {test_accuracy}%')
 
-dump(pipe,"KNN.sav")
+dump(pipe,"GDB.sav")
 
 # get the end time
 et = time.process_time()
