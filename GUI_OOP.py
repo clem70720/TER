@@ -54,17 +54,21 @@ class App(TkinterDnD.Tk):
     @staticmethod
     def adapt_text_model(radio_val):
       if radio_val == 0:
-          return "KNN.sav"
+          return "./Models/KNN.sav"
       elif radio_val == 1:
-          return "SVC.sav"
+          return "./Models/SVC.sav"
       elif radio_val == 2:
-          return "LinearSVC.sav"
+          return "./Models/LinearSVC.sav"
       elif radio_val == 3:
-          return "LogReg.sav"
+          return "./Models/LogReg.sav"
       elif radio_val == 4:
-          return "ML-Perceptron.keras"
+          return "./Models/HGDB.sav"
       elif radio_val == 5:
-          return "CNN.keras"
+          return "./Models/RF.sav"
+      elif radio_val == 6:
+          return "./Models/ML-Perceptron.keras"
+      elif radio_val == 7:
+          return "./Models/CNN.keras"
 
     @staticmethod
     def create_pred_text(prediction):
