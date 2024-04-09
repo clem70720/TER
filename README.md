@@ -10,4 +10,4 @@ skimage,
 tkinter,
 tkinterdnd2
 
-Back to tkinter update done 
+New update adding HistGradienBoosting and RandomForest to pool of machine learning algorithms tested 
