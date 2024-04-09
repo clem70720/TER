@@ -32,8 +32,10 @@ class App(TkinterDnD.Tk):
           "Support Vector Machine" : "1",
           "Linear Support Vector Machine" : "2",
           "Logistic Regression" : "3",
-          "Multi-Layers Perceptron": "4",
-          "Convolution Neural Network": "5"}
+          "Gradient Boosting" : "4",
+          "Random Forest" : "5",
+          "Multi-Layers Perceptron": "6",
+          "Convolution Neural Network": "7"}
 
     for (text, value) in values.items():
         value_y = 40 + int(value) * 40
