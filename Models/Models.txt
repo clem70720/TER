@@ -1,0 +1,9 @@
+List of models availables:
+Convulationnal neural network
+Multi layers perceptron
+LinearSVC
+SVC
+KNN
+HistGradientBoostingClassifier
+RandomForestClassifier
+Logistic Regression
