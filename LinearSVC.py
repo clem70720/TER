@@ -33,7 +33,7 @@ y_test=df_test.label
 
 linear_svc = LinearSVC(loss='hinge',multi_class='ovr',dual='auto') 
 
-calibrated_svc = CalibratedClassifierCV(linear_svc, cv=1) 
+calibrated_svc = CalibratedClassifierCV(linear_svc, cv=2) 
 
 # Making a pipeline to get faster CPU exec time 
 pipe = Pipeline([('pca', PCA(n_components=0.9)), ('LinearSVC_Classifier',calibrated_svc)])
