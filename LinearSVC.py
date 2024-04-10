@@ -31,7 +31,7 @@ X_test=df_test.drop('label',axis=1).astype("float32")
 X_test = X_test / np.max (X_test)
 y_test=df_test.label
 
-linear_svc = LinearSVC(loss='hinge',multi_class='ovr',dual='auto') 
+linear_svc = LinearSVC(loss='hinge',multi_class='ovr') 
 
 calibrated_svc = CalibratedClassifierCV(linear_svc, cv=2) 
 
