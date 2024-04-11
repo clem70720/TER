@@ -6,6 +6,7 @@ from sklearn.svm import LinearSVC
 from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import cross_val_score
+from sklearn.metrics import precision_recall_fscore_support
 from joblib import dump
 from sklearn.calibration import CalibratedClassifierCV
 
@@ -51,6 +52,9 @@ pipe.fit(X_train,y_train)
 score_accuracy = pipe.score(X_test,y_test)
 test_accuracy=round(100*score_accuracy,2)
 print(f'The test accuracy score is {test_accuracy}%')
+precision, recall_score, f1_score, support = precision_recall_fscore_support(y_test, pipe.predict(X_test), average='weighted')
+print(f"Recall = {recall_score}")
+print(f"F1 Score = {f1_score}")
 
 dump(pipe,"LinearSVC.sav")
 
