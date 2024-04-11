@@ -14,6 +14,7 @@ import math
 from keras.utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, BatchNormalization
+from keras.metrics import Recall,F1Score
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 
@@ -65,7 +66,7 @@ model.add(Dense(256, activation='mish'))
 model.add(Dropout(0.5))
 model.add(Dense(10, activation='softmax'))
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy',Recall(), F1Score()])
 
 model.fit(X_train,y_train,batch_size=Batch_size,epochs=No_epochs, verbose=1,validation_data=(X_val, y_val))
 
