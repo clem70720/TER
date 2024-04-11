@@ -5,6 +5,7 @@ from keras.utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, BatchNormalization, Activation, Flatten,Dense
 from keras.losses import SparseCategoricalCrossentropy
+from keras.metrics import Recall,F1Score
 from keras.datasets import fashion_mnist
 from sklearn.model_selection import train_test_split
 
@@ -48,7 +49,7 @@ model = Sequential([Flatten(input_shape=(28,28,1)),
                     Dense(10,activation='softmax'),
                     ])
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy',Recall(), F1Score()])
 
 model.fit(X_train,y_train,epochs=No_epochs,verbose=1,validation_data=(X_val, y_val))
 
