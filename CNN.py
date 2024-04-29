@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pad
 import time
 import math
-from keras.utils import to_categorical
+from tf.python.keras.utils import to_categorical
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPooling2D, BatchNormalization
 from keras.metrics import Recall,F1Score
